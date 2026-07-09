@@ -239,6 +239,7 @@ function verifyPassword(){
 }
 
 function completeLogin(){
+  if(!provider&&window.ethereum){provider=new ethers.providers.Web3Provider(window.ethereum);signer=provider.getSigner();contract=new ethers.Contract(CONTRACT,ABI,provider)}
   localStorage.setItem('sltbCurrentAddr',userAddr);
   currentAddr=userAddr;
   document.getElementById('homeNotLogged').style.display='none';
@@ -275,17 +276,20 @@ function logout(){
 let usdtContract;
 async function updateBalance(){
   if(!userAddr||!contract)return;
+  document.getElementById('homeSltbBal').textContent='查询中...';
+  document.getElementById('homeUsdtBal').textContent='查询中...';
   try{
     const b=await contract.balanceOf(userAddr);
-    document.getElementById('sltbPrice').textContent=ethers.utils.formatEther(b);
-    document.getElementById('homeSltbBal').textContent=parseFloat(ethers.utils.formatEther(b)).toFixed(2);
-  }catch(e){}
+    const sltbVal=parseFloat(ethers.utils.formatEther(b));
+    document.getElementById('sltbPrice').textContent=sltbVal.toFixed(4);
+    document.getElementById('homeSltbBal').textContent=sltbVal.toFixed(2);
+  }catch(e){document.getElementById('homeSltbBal').textContent='0.00';console.log('SLTB err',e)}
   try{
     if(!usdtContract)usdtContract=new ethers.Contract(USDT,USDT_ABI,provider);
     const u=await usdtContract.balanceOf(userAddr);
-    const decimals=await usdtContract.decimals();
-    document.getElementById('homeUsdtBal').textContent=parseFloat(ethers.utils.formatUnits(u,decimals)).toFixed(2);
-  }catch(e){}
+    const d=await usdtContract.decimals();
+    document.getElementById('homeUsdtBal').textContent=parseFloat(ethers.utils.formatUnits(u,d)).toFixed(2);
+  }catch(e){document.getElementById('homeUsdtBal').textContent='0.00';console.log('USDT err',e)}
 }
 
 // === 商家 ===
