@@ -281,9 +281,9 @@ async function updateBalance(){
   try{
     const b=await contract.balanceOf(userAddr);
     const sltbVal=parseFloat(ethers.utils.formatEther(b));
-    document.getElementById('sltbPrice').textContent=sltbVal.toFixed(4);
     document.getElementById('homeSltbBal').textContent=sltbVal.toFixed(2);
   }catch(e){document.getElementById('homeSltbBal').textContent='0.00';console.log('SLTB err',e)}
+  document.getElementById('sltbPrice').textContent='1.00';
   try{
     if(!usdtContract)usdtContract=new ethers.Contract(USDT,USDT_ABI,provider);
     const u=await usdtContract.balanceOf(userAddr);
