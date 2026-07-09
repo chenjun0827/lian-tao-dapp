@@ -170,7 +170,7 @@
 </div>
 <div class="modal-overlay" id="modalOverlay" style="display:none" onclick="closeModal(event)"><div class="modal-content" id="modalContent" onclick="event.stopPropagation()"></div></div>
 <script>
-const CONTRACT='0xd2f357A47A075C46889c4dF11440ACF1C371E555';const USDT='0x55d398326f99059ff775485246999027b3197955';const USDT_ABI=['function balanceOf(address) view returns (uint256)','function decimals() view returns (uint8)'];const POOL='0x54D710c4F9AbA58D7cdee2799fFde497944198AF';
+const CONTRACT='0xd2f357A47A075C46889c4dF11440ACF1C371E555';const USDT='0x55d398326f99059ff775485246999027b3197955';const USDT_ABI=['function balanceOf(address) view returns (uint256)','function decimals() view returns (uint8)'];
 const ABI=['function name()','function symbol()','function decimals() view returns (uint8)','function totalSupply() view returns (uint256)','function balanceOf(address) view returns (uint256)','function transfer(address,uint256) returns (bool)','function transferFrom(address,address,uint256) returns (bool)','function approve(address,uint256) returns (bool)'];
 let provider,signer,contract,userAddr,userPass;
 let walletUsers=JSON.parse(localStorage.getItem('sltbWalletUsers')||'{}');
