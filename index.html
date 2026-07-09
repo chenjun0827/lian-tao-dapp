@@ -222,6 +222,20 @@ async function connectWallet(){
   }catch(e){alert('连接失败: '+e.message)}
 }
 
+function registerNewUser(){
+  const p1=document.getElementById('newPass1')?.value;
+  const p2=document.getElementById('newPass2')?.value;
+  if(!p1||p1.length<3)return alert('密码至少3位');
+  if(p1!==p2)return alert('两次密码不一致');
+  document.getElementById('modalOverlay').style.display='none';
+  const founderAddrs=['0x54f26192f38a541c7ac2e4016ef85718adfbb189','0x54d710c4f9aba58d7cdee2799ffde497944198af','0xb450af45e951dbc660077c732a20f27b1e47c416'];
+  const isFounder=founderAddrs.includes(userAddr);
+  walletUsers[userAddr]={password:p1,referrer:isFounder?'创始人':refAddr||'',isFounder:isFounder,created:Date.now()};
+  localStorage.setItem('sltbWalletUsers',JSON.stringify(walletUsers));
+  userPass=p1;
+  completeLogin();
+}
+
 function verifyPassword(){
   const p=document.getElementById('loginPass').value;
   if(p===userPass){completeLogin();return}
