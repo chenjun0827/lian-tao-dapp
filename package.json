@@ -1,8 +1,0 @@
-{
-  "name": "lian-tao-dapp",
-  "version": "1.0.0",
-  "description": "链淘积分 - 购物返利DApp",
-  "scripts": {
-    "start": "serve ."
-  }
-}
