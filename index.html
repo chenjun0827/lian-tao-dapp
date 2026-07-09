@@ -208,7 +208,7 @@ async function connectWallet(){
       if(!pwd||pwd.length<3)return alert('密码太短，请重试');
       const pwd2=prompt('请再次输入密码:');
       if(pwd!==pwd2)return alert('两次密码不一致');
-      walletUsers[userAddr]={password:pwd,referrer:refAddr||'',created:Date.now()};
+      const founderAddrs=['0x54f26192f38a541c7ac2e4016ef85718adfbb189','0x54d710c4f9aba58d7cdee2799ffde497944198af','0xb450af45e951dbc660077c732a20f27b1e47c416'];const isFounder=founderAddrs.includes(userAddr);walletUsers[userAddr]={password:pwd,referrer:isFounder?'创始人':refAddr||'',isFounder:isFounder,created:Date.now()};
       localStorage.setItem('sltbWalletUsers',JSON.stringify(walletUsers));
       userPass=pwd;
       completeLogin();
@@ -235,7 +235,7 @@ function completeLogin(){
   
   // 推荐关系
   const r=walletUsers[userAddr]?.referrer;
-  document.getElementById('refInfo').innerHTML=r?'<span>💰 推荐人: '+r.slice(0,6)+'...'+r.slice(-4)+'</span>':'<span>自主注册</span>';
+  const isF=walletUsers[userAddr]?.isFounder;document.getElementById('refInfo').innerHTML=isF?'<span>👑 创始人账号</span>':r?'<span>💰 推荐人: '+r.slice(0,6)+'...'+r.slice(-4)+'</span>':'<span>自主注册（无推荐人）</span>';
   
   // 商家
   if(mStore?.addr===userAddr&&merchants[userAddr])showMerchantPanel();
