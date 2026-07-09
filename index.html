@@ -197,7 +197,7 @@ async function connectWallet(){
     provider=new ethers.providers.Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts',[]);
     signer=provider.getSigner();
-    userAddr=await signer.getAddress().then(a=>a.toLowerCase());localStorage.removeItem('sltbCurrentAddr');currentAddr=null;
+    userAddr=await signer.getAddress().then(a=>a.toLowerCase());currentAddr=null;
     contract=new ethers.Contract(CONTRACT,ABI,provider);
     
     // 检查是否已注册
@@ -238,9 +238,9 @@ function verifyPassword(){
   alert('密码错误');
 }
 
-function completeLogin(){
-  if(!provider&&window.ethereum){provider=new ethers.providers.Web3Provider(window.ethereum);signer=provider.getSigner();contract=new ethers.Contract(CONTRACT,ABI,provider)}
-  localStorage.setItem('sltbCurrentAddr',userAddr);
+async function completeLogin(){
+  if(!provider&&window.ethereum){provider=new ethers.providers.Web3Provider(window.ethereum);contract=new ethers.Contract(CONTRACT,ABI,provider)}
+  if(!userAddr){try{const a=await provider.listAccounts();if(a.length>0)userAddr=a[0].toLowerCase()}catch(e){}}
   currentAddr=userAddr;
   document.getElementById('homeNotLogged').style.display='none';
   document.getElementById('homeLogin').style.display='none';
@@ -263,7 +263,8 @@ function completeLogin(){
 
 function logout(){
   localStorage.removeItem('sltbCurrentAddr');
-  currentAddr=null;userAddr=null;
+  localStorage.removeItem('sltbCurrentUser');
+  currentAddr=null;userAddr=null;provider=null;
   document.getElementById('homeLogged').style.display='none';
   document.getElementById('homeLogin').style.display='none';
   document.getElementById('homeNotLogged').style.display='block';
@@ -400,12 +401,23 @@ renderShop();renderOrders();
 // 显示推荐链接提示
 if(refAddr)document.getElementById('homeGreeting').textContent='通过邀请链接加入 🎉';
 
-// 自动登录
-if(currentAddr&&walletUsers[currentAddr]){
-  userAddr=currentAddr;
-  userPass=walletUsers[currentAddr]?.password;
-  if(userPass)completeLogin();
+// 自动连接 - 获取TP钱包当前选中的地址
+async function autoConnect(){
+  if(!window.ethereum)return;
+  try{
+    provider=new ethers.providers.Web3Provider(window.ethereum);
+    const accounts=await provider.listAccounts();
+    if(accounts.length>0){
+      userAddr=accounts[0].toLowerCase();
+      contract=new ethers.Contract(CONTRACT,ABI,provider);
+      if(walletUsers[userAddr]){
+        userPass=walletUsers[userAddr]?.password;
+        if(userPass)completeLogin();
+      }
+    }
+  }catch(e){}
 }
+autoConnect();
 </script>
 </body>
 </html>
