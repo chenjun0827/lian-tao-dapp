@@ -299,7 +299,7 @@ async function updateBalance(){
     const s=parseFloat(ethers.utils.formatEther(sltbBal2));
     const u=parseFloat(ethers.utils.formatUnits(usdtBal2,await usdtContract.decimals()));
     document.getElementById('sltbPrice').textContent=s>0?(u/s).toFixed(4):'0.0000';
-  }catch(e){document.getElementById('sltbPrice').textContent='1.00'}
+  }catch(e){document.getElementById('sltbPrice').textContent='1.00';console.log('价格err',e)}
   try{
     if(!usdtContract)usdtContract=new ethers.Contract(USDT,USDT_ABI,provider);
     const u=await usdtContract.balanceOf(userAddr);
