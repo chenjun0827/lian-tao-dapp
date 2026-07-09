@@ -209,15 +209,11 @@ async function connectWallet(){
       document.getElementById('loginPass').value='';
       userPass=walletUsers[userAddr].password;
     }else{
-      // 新用户，设置密码
-      const pwd=prompt('🎉 首次登录！请设置登录密码（用于下次登录验证）:');
-      if(!pwd||pwd.length<3)return alert('密码太短，请重试');
-      const pwd2=prompt('请再次输入密码:');
-      if(pwd!==pwd2)return alert('两次密码不一致');
-      const founderAddrs=['0x54f26192f38a541c7ac2e4016ef85718adfbb189','0x54d710c4f9aba58d7cdee2799ffde497944198af','0xb450af45e951dbc660077c732a20f27b1e47c416'];const isFounder=founderAddrs.includes(userAddr);walletUsers[userAddr]={password:pwd,referrer:isFounder?'创始人':refAddr||'',isFounder:isFounder,created:Date.now()};
-      localStorage.setItem('sltbWalletUsers',JSON.stringify(walletUsers));
-      userPass=pwd;
-      completeLogin();
+      document.getElementById('homeNotLogged').style.display='none';
+      const mc=document.getElementById('modalContent');
+      document.getElementById('modalOverlay').style.display='flex';
+      mc.innerHTML='<h2>🎉 首次注册</h2><p style="font-size:13px;color:#666;margin-bottom:16px">连接成功！请设置登录密码</p><div class="form-group"><label>设置密码</label><input type="password" id="newPass1" placeholder="至少3位" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none"></div><div class="form-group"><label>确认密码</label><input type="password" id="newPass2" placeholder="再次输入" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none"></div><button class="btn btn-primary btn-block" onclick="registerNewUser()">完成注册</button>';
+      return;
     }
   }catch(e){alert('连接失败: '+e.message)}
 }
