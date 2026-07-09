@@ -401,7 +401,7 @@ renderShop();renderOrders();
 // 显示推荐链接提示
 if(refAddr)document.getElementById('homeGreeting').textContent='通过邀请链接加入 🎉';
 
-// 自动连接 - 获取TP钱包当前选中的地址
+// 自动连接 - 检测已连接的钱包，有注册过则显示密码框
 async function autoConnect(){
   if(!window.ethereum)return;
   try{
@@ -412,7 +412,10 @@ async function autoConnect(){
       contract=new ethers.Contract(CONTRACT,ABI,provider);
       if(walletUsers[userAddr]){
         userPass=walletUsers[userAddr]?.password;
-        if(userPass)completeLogin();
+        document.getElementById('homeNotLogged').style.display='none';
+        document.getElementById('homeLogin').style.display='block';
+        document.getElementById('loginAddr').textContent=userAddr.slice(0,6)+'...'+userAddr.slice(-4);
+        document.getElementById('loginPass').value='';
       }
     }
   }catch(e){}
