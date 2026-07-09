@@ -197,7 +197,7 @@ async function connectWallet(){
     provider=new ethers.providers.Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts',[]);
     signer=provider.getSigner();
-    userAddr=await signer.getAddress().then(a=>a.toLowerCase());
+    userAddr=await signer.getAddress().then(a=>a.toLowerCase());localStorage.removeItem('sltbCurrentAddr');currentAddr=null;
     contract=new ethers.Contract(CONTRACT,ABI,provider);
     
     // 检查是否已注册
